@@ -10,7 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.kotlin.KotlinModule;
-import com.orange.ccmd.katalog.api.domain.models.Catalog;
+
+import fr.behaska.examples.kotlin.api.domain.models.Catalog;
 
 public class Main {
 
@@ -42,7 +43,7 @@ public class Main {
             catalog = mapper.readValue(json, Catalog.class);
             logger.debug("Date du catalogue : {}", catalog.getMetadata().getDate());
         } catch (IOException e) {
-            logger.error(" IOException during marshalling : {}", e);
+            logger.error("IOException during marshalling", e);
         }
 
     }

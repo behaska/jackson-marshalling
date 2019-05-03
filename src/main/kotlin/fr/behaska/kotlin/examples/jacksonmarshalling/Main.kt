@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.orange.ccmd.katalog.api.domain.models.Catalog
+import fr.behaska.examples.kotlin.api.domain.models.Catalog
 import org.slf4j.LoggerFactory
 import java.io.IOException
 
