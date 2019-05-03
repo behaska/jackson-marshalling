@@ -21,7 +21,7 @@ public class Main {
         String json = "{\n"
                 + "\"content\": \"foo\",\n"
                 + "\"metadata\":{\n"
-                + "\"name\": \"Catalog-TELESURVEILLANCE-EDITO\",\n"
+                + "\"name\": \"Catalog-foo-bar\",\n"
                 + "\"date\": \"2019-05-03T15:14:48.347445\",\n"
                 + "\"size\": 8709,\n"
                 + "\"hash\": \"2bbd420a3322e7b9360e8ca207af9b0dee8bcb0ef2bc885a349ddd7c0d6cdeb4\",\n"
