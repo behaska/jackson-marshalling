@@ -51,8 +51,6 @@ dependencies {
 
     compile("ch.qos.logback:logback-classic:$logbackVersion")
 
-    implementation("com.squareup.moshi:moshi-kotlin:1.8.0") // nécessaire pour les classes générées par swagger
-
     testImplementation("org.junit.jupiter:junit-jupiter:$kotlintestVersion")
 }
 
@@ -73,11 +71,7 @@ val compileKotlin by tasks.getting(KotlinCompile::class) {
     doLast { println("Finished compiling Kotlin source code") }
 }
 
-kotlin.sourceSets["main"].kotlin.srcDirs("src","build/generated-sources/swagger/src/main/kotlin")
-kotlin.sourceSets["test"].kotlin.srcDirs("test")
-
-sourceSets["main"].resources.srcDirs("resources")
-sourceSets["test"].resources.srcDirs("testresources")
+kotlin.sourceSets["main"].kotlin.srcDirs("build/generated-sources/swagger/src/main/kotlin")
 
 val generateSwaggerSources = task("generateSwaggerSources") {
 
@@ -94,7 +88,7 @@ val generateSwaggerSources = task("generateSwaggerSources") {
             addSystemProperty("models", "") // pour ne générer que les classes du modèle, pas les stubs
             addSystemProperty("modelDocs", "false") // pour ne générer que les classes du modèle, pas les stubs
             generatorName = "kotlin"
-            modelPackage = "com.orange.ccmd.katalog.api.domain.models"
+            modelPackage = "fr.behaska.examples.kotlin.api.domain.models"
             additionalProperties = mapOf(
                     "dateLibrary" to "java8",
                     "enumPropertyNaming" to "original" // sinon par défaut les enums sont en camelCase
