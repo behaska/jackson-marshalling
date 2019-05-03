@@ -1,0 +1,1196 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.0.6",
+    "title": "API pour exposer le catalog",
+    "license": {
+      "name": "APL2"
+    }
+  },
+  "basePath": "/api/v1/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "parameters": {
+    "catalogSiIdParam": {
+      "name": "catalogSiId",
+      "in": "path",
+      "description": "ID du scope du catalogue de type SI",
+      "required": true,
+      "type": "string",
+      "enum": [
+        "reunion",
+        "telesurveillance",
+        "myshop"
+      ]
+    },
+    "catalogEditoIdParam": {
+      "name": "catalogEditoId",
+      "in": "path",
+      "description": "ID du scope du catalogue de type Edito",
+      "required": true,
+      "type": "string",
+      "enum": [
+        "reunion",
+        "telesurveillance",
+        "myshop"
+      ]
+    },
+    "offerParam": {
+      "in": "path",
+      "name": "offerId",
+      "description": "ID de l'offre",
+      "required": true,
+      "type": "string"
+    },
+    "discountParam": {
+      "in": "path",
+      "name": "discountId",
+      "description": "ID de la promotion",
+      "required": true,
+      "type": "string"
+    },
+    "legalMentionParam": {
+      "in": "path",
+      "name": "legalMentionId",
+      "description": "ID de la mention légale",
+      "required": true,
+      "type": "string"
+    }
+  },
+  "paths": {
+    "/catalogSi/{catalogSiId}": {
+      "get": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Expose le contenu du catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu du catalogue",
+            "schema": {
+              "$ref": "#/definitions/Catalog"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogSi/{catalogSiId}/store": {
+      "post": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Stocke le contenu du catalogue dans le body dans l'API Katalog après validation",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retourne un booléen",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "L'URL du catalogue qui vient d'être crée"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Catalog"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogSi/{catalogSiId}/validate": {
+      "post": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Valide le contenu du catalogue présent dans le body",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retourne un booléen",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "L'URL du catalogue qui vient d'être crée"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Catalog"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogSi/{catalogSiId}/info": {
+      "get": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Expose les infos sur le catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns les infos sur le catalog chargé",
+            "schema": {
+              "$ref": "#/definitions/Information"
+            }
+          },
+          "500": {
+            "description": "Returns une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogSi/{catalogSiId}/offers": {
+      "get": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Expose le contenu des offres pour un catalogue",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des offres pour un catalogue",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SiOffer"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogSi/{catalogSiId}/offers/{offerId}": {
+      "get": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Expose le contenu d'une offre pour un catalogue donné",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          },
+          {
+            "$ref": "#/parameters/offerParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu d'une offres pour un catalogue",
+            "schema": {
+              "$ref": "#/definitions/SiOffer"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogSi/{catalogSiId}/offers/{offerId}/discounts": {
+      "get": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          },
+          {
+            "$ref": "#/parameters/offerParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des promotions pour un catalog",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SiDiscount"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogSi/{catalogSiId}/discounts": {
+      "get": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des promotions pour un catalog",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SiDiscount"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogSi/{catalogSiId}/discounts/{discountId}": {
+      "get": {
+        "tags": [
+          "Catalog SI"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogSiIdParam"
+          },
+          {
+            "$ref": "#/parameters/discountParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu d'une promotions pour un catalog",
+            "schema": {
+              "$ref": "#/definitions/SiDiscount"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "description": "Expose l'état du système (up ou down)",
+        "responses": {
+          "200": {
+            "description": "Returns l'état du système",
+            "schema": {
+              "$ref": "#/definitions/Health"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/{catalogEditoId}": {
+      "get": {
+        "tags": [
+          "Catalog Edito Générique"
+        ],
+        "description": "Expose le contenu du catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogEditoIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu du catalogue edito de Reunion",
+            "schema": {
+              "$ref": "#/definitions/Catalog"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/{catalogEditoId}/store": {
+      "post": {
+        "tags": [
+          "Catalog Edito Générique"
+        ],
+        "description": "Expose le contenu du catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogEditoIdParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retourne un booléen",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "L'URL du catalogue qui vient d'être crée"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Catalog"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/{catalogEditoId}/validate": {
+      "post": {
+        "tags": [
+          "Catalog Edito Générique"
+        ],
+        "description": "Expose le contenu du catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogEditoIdParam"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Retourne un booléen",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "L'URL du catalogue qui vient d'être crée"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Catalog"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/{catalogEditoId}/info": {
+      "get": {
+        "tags": [
+          "Catalog Edito Générique"
+        ],
+        "description": "Expose les infos sur le catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/catalogEditoIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns les infos sur le catalog chargé",
+            "schema": {
+              "$ref": "#/definitions/Information"
+            }
+          },
+          "500": {
+            "description": "Returns une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/reunion/offers": {
+      "get": {
+        "tags": [
+          "Catalog Edito Réunion"
+        ],
+        "description": "Expose le contenu des offres pour un catalogue",
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des offres pour un catalogue",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ReunionEditoOffer"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/reunion/offers/{offerId}": {
+      "get": {
+        "tags": [
+          "Catalog Edito Réunion"
+        ],
+        "description": "Expose le contenu d'une offre pour un catalogue donné",
+        "parameters": [
+          {
+            "$ref": "#/parameters/offerParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu d'une offres pour un catalogue",
+            "schema": {
+              "$ref": "#/definitions/ReunionEditoOffer"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/reunion/discounts": {
+      "get": {
+        "tags": [
+          "Catalog Edito Réunion"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des promotions pour un catalog",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EditoDiscount"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/reunion/discounts/{discountId}": {
+      "get": {
+        "tags": [
+          "Catalog Edito Réunion"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/discountParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu d'une promotions pour un catalog",
+            "schema": {
+              "$ref": "#/definitions/EditoDiscount"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/reunion/legalMentions": {
+      "get": {
+        "tags": [
+          "Catalog Edito Réunion"
+        ],
+        "description": "Expose le contenu des mentions légales pour le catalog de Réunion",
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des mentions légales pour un catalog",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EditoLegalMention"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/reunion/legalMentions/{legalMentionId}": {
+      "get": {
+        "tags": [
+          "Catalog Edito Réunion"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/legalMentionParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu d'une promotions pour un catalog",
+            "schema": {
+              "$ref": "#/definitions/EditoLegalMention"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/telesurveillance/offers": {
+      "get": {
+        "tags": [
+          "Catalog Edito Télésurveillance"
+        ],
+        "description": "Expose le contenu des offres pour un catalogue",
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des offres pour un catalogue",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TelesurveillanceEditoOffer"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/telesurveillance/offers/{offerId}": {
+      "get": {
+        "tags": [
+          "Catalog Edito Télésurveillance"
+        ],
+        "description": "Expose le contenu d'une offre pour un catalogue donné",
+        "parameters": [
+          {
+            "$ref": "#/parameters/offerParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu d'une offres pour un catalogue",
+            "schema": {
+              "$ref": "#/definitions/TelesurveillanceEditoOffer"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/telesurveillance/discounts": {
+      "get": {
+        "tags": [
+          "Catalog Edito Télésurveillance"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des promotions pour un catalog",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EditoDiscount"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/telesurveillance/discounts/{discountId}": {
+      "get": {
+        "tags": [
+          "Catalog Edito Télésurveillance"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/discountParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu d'une promotions pour un catalog",
+            "schema": {
+              "$ref": "#/definitions/EditoDiscount"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/telesurveillance/legalMentions": {
+      "get": {
+        "tags": [
+          "Catalog Edito Télésurveillance"
+        ],
+        "description": "Expose le contenu des mentions légales pour le catalog de Réunion",
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu des mentions légales pour un catalog",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EditoLegalMention"
+              }
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/catalogEdito/telesurveillance/legalMentions/{legalMentionId}": {
+      "get": {
+        "tags": [
+          "Catalog Edito Télésurveillance"
+        ],
+        "description": "Expose le contenu des promotions pour un catalog",
+        "parameters": [
+          {
+            "$ref": "#/parameters/legalMentionParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne le contenu d'une promotions pour un catalog",
+            "schema": {
+              "$ref": "#/definitions/EditoLegalMention"
+            }
+          },
+          "404": {
+            "description": "Retourne cette erreur si le scopeId ou le modeId n'est pas trouvé",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Retourne une erreur sur la cause de l'erreur",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Metadata": {
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "duration": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        },
+        "hash": {
+          "type": "string"
+        }
+      }
+    },
+    "Catalog": {
+      "required": [
+        "content",
+        "metadata"
+      ],
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        }
+      }
+    },
+    "Information": {
+      "required": [
+        "name",
+        "hash"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "hash": {
+          "type": "string"
+        }
+      }
+    },
+    "Health": {
+      "required": [
+        "systemIs"
+      ],
+      "properties": {
+        "systemIs": {
+          "type": "string"
+        }
+      }
+    },
+    "SiOffer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "invoice": {
+          "$ref": "#/definitions/Invoice"
+        },
+        "commitment": {
+          "type": "integer"
+        },
+        "idSeo": {
+          "type": "string"
+        },
+        "odrs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Odr"
+          }
+        },
+        "discounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SiDiscount"
+          }
+        }
+      }
+    },
+    "Invoice": {
+      "type": "object",
+      "properties": {
+        "cycle": {
+          "type": "string",
+          "enum": [
+            "PER_MONTH"
+          ]
+        },
+        "price": {
+          "$ref": "#/definitions/Price"
+        }
+      }
+    },
+    "Odr": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "SiDiscount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "price": {
+          "$ref": "#/definitions/Price"
+        },
+        "duration": {
+          "type": "integer"
+        }
+      }
+    },
+    "Price": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "description": "Le montant est stocké sous forme de centimes pour éviter tout problème d'arrondi avec le float."
+        },
+        "currency": {
+          "type": "integer"
+        }
+      }
+    },
+    "ReunionEditoOffer": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "idSeo": {
+          "type": "string"
+        },
+        "visual": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "attributs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Attributes"
+          }
+        },
+        "discounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EditoDiscount"
+          }
+        },
+        "legalMentions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EditoLegalMention"
+          }
+        }
+      }
+    },
+    "Attributes": {
+      "type": "object",
+      "properties": {
+        "urlImage": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "EditoDiscount": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "headband": {
+          "type": "string"
+        },
+        "legalMentions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EditoLegalMention"
+          }
+        }
+      }
+    },
+    "EditoLegalMention": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "TelesurveillanceEditoOffer": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "idSeo": {
+          "type": "string"
+        },
+        "shortLabel": {
+          "type": "string"
+        },
+        "longLabel": {
+          "type": "string"
+        },
+        "visual": {
+          "type": "string"
+        },
+        "attributs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Attributes"
+          }
+        },
+        "discounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EditoDiscount"
+          }
+        },
+        "legalMentions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EditoLegalMention"
+          }
+        }
+      }
+    },
+    "Error": {
+      "required": [
+        "status",
+        "message",
+        "description"
+      ],
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
