@@ -51,6 +51,8 @@ dependencies {
 
     compile("ch.qos.logback:logback-classic:$logbackVersion")
 
+    implementation("com.squareup.moshi:moshi-kotlin:1.8.0") // nécessaire pour les classes générées par swagger
+    
     testImplementation("org.junit.jupiter:junit-jupiter:$kotlintestVersion")
 }
 
